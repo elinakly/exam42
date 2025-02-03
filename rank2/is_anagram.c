@@ -1,41 +1,39 @@
 #include <unistd.h>
 
-void	ft_str_tolower(char *s)
+char *ft_tolower(char *s)
 {
 	int i = 0;
 
-	while (s[i] != '\0')
+	while(s[i] != '\0')
 	{
-		if (s[i] >= 'A' && s[i] <= 'Z')
-			s[i] += 32;
+		if (s[i] >= 'a' && s[i] <- 'z')
+		{
+			s[i] -= 32;
+		}
 		i++;
 	}
+	return (s);
 }
 
 int	main(int argc, char **argv)
 {
-
+	char *s1, *s2;
+	int i = 0;
 	if (argc != 3)
 		return (1);
-
-	int table[256] = {0};
-	int i = 0;
-
-	char *s1 = argv[1];
-	char *s2 = argv[2];
-
-	ft_str_tolower(s1);
-	ft_str_tolower(s2);
+	char table[256] = {0}; 
+	s1 = ft_tolower(argv[1]);
+	s2 = ft_tolower(argv[2]);
 
 	while (s1[i] != '\0')
 	{
-		table[(unsigned char)s1[i]] += 1;
+		table[s1[i]] += 1;
 		i++;
 	}
 	i = 0;
 	while (s2[i] != '\0')
 	{
-		table[(unsigned char)s2[i]] -= 1;
+		table[s2[i]] -= 1;
 		i++;
 	}
 	i = 0;
