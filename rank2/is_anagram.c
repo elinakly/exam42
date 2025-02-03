@@ -42,7 +42,7 @@ int	main(int argc, char **argv)
 	while (i < 256)
 	{
 		if (table[i] != 0)
-			return (0);
+			return (1);
 		i++;
 	}
 	return (0);
