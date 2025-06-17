@@ -3,33 +3,35 @@
 
 int count(int start, int end)
 {
-	int count = 1;
+	int i = 1;
+
 	while (start != end)
 	{
-		count++;
 		if (start < end)
-			start++;
-		else
-			start--;
+			end--;
+		else 
+			end++;
+		i++;
 	}
-	return (count);
+	return (i);
+
 }
 
 int *ft_range(int start, int end)
 {
-	int size = count(start, end);
-	int *arr = malloc(sizeof(int) * size);
-	if (!arr)
-		return (0);
+	int size;
+	int *arr;
 	int i = 0;
+	arr = malloc(sizeof(char) * count(start, end));
 	while (start != end)
 	{
 		arr[i] = start;
 		i++;
 		if (start < end)
 			start++;
-		else
+		else 
 			start--;
+		i++;
 	}
 	arr[i] = end;
 	return (arr);

@@ -15,28 +15,28 @@
 
 char    **ft_split(char *str)
 {
-	int i =0;
-	int k =0;
-	int j =0;
 	char **arr;
+	int i = 0;
+	int j = 0;
+	int k = 0;
 
-	arr = malloc(sizeof(char*) * 1000);
-	if (!arr)
-		return (0);
+	arr = malloc (sizeof(char *) * 1000);
 	while (str[i])
 	{
-		if (str[i] == '\n' || str[i] == '\v' || str[i] == ' ' || str[i] == '\t')
+		while (str[i] == ' ' || str[i] == '\n')
 			i++;
 		if (str[i])
 		{
-			j = 0;
-			arr[k] = malloc(sizeof(char) * 1000);
-			while (str[i] && str[i] != '\n' && str[i] != '\v' && str[i] != ' ' && str[i] != '\t')
-				arr[k][j++] = str[i++];
-			arr[k++][j] = '\0';
+			k = 0;
+			arr[j] = malloc (sizeof(char) * 1000);
+			while (str[i] && str[i] != '\v' && str[i] != ' ')
+			{
+				arr[j][k++] = str[i++];
+			}
+			arr[j++][k] = '\0';
 		}
 	}
-	arr[k] = NULL;
+	arr[j] = NULL;
 	return (arr);
 }
 int main (void)
