@@ -1,31 +1,22 @@
-Assignment name  : microshell
-Expected files   : *.c *.h
-Allowed functions: malloc, free, write, close, fork, waitpid, signal, kill, exit, chdir, execve, dup, dup2, pipe, strcmp, strncmp
---------------------------------------------------------------------------------------
+Assignment name:	picoshell
+Expected files:		picoshell.c
+Allowed functions:	close, fork, wait, exit, execvp, dup2, pipe
+___________________________________________________________________
 
-Write a program that will behave like executing a shell command
-- The command line to execute will be the arguments of this program
-- Executable's path will be absolute or relative but your program must not build a path (from the PATH variable for example)
-- You must implement "|" and ";" like in bash
-	- we will never try a "|" immediately followed or preceded by nothing or "|" or ";"
-- Your program must implement the built-in command cd only with a path as argument (no '-' or without parameters)
-	- if cd has the wrong number of argument your program should print in STDERR "error: cd: bad arguments" followed by a '\n'
-	- if cd failed your program should print in STDERR "error: cd: cannot change directory to path_to_change" followed by a '\n' with path_to_change replaced by the argument to cd
-	- a cd command will never be immediately followed or preceded by a "|"
-- You don't need to manage any type of wildcards (*, ~ etc...)
-- You don't need to manage environment variables ($BLA ...)
-- If a system call, except execve and chdir, returns an error your program should immediatly print "error: fatal" in STDERR followed by a '\n' and the program should exit
-- If execve failed you should print "error: cannot execute executable_that_failed" in STDERR followed by a '\n' with executable_that_failed replaced with the path of the failed executable (It should be the first argument of execve)
-- Your program should be able to manage more than hundreds of "|" even if we limit the number of "open files" to less than 30.
+Write the following function:
 
-for example this should work:
-$>./microshell /bin/ls "|" /usr/bin/grep microshell ";" /bin/echo i love my microshell
-microshell
-i love my microshell
-$>
+int    picoshell(char **cmds[]);
 
-Hints:
-Don't forget to pass the environment variable to execve
+The goal of this function is to execute a pipeline. It must execute each
+commands of cmds and connect the output of one to the input of the
+next command (just like a shell).
+e
+Cmds contains a null-terminated list of valid commands. Each rows
+of cmds are an argv array directly usable for a call to execvp. The first
+arguments of each command is the command name or path and can be passed
+directly as the first argument of execvp.
 
-Hints:
-Do not leak file descriptors!
+If any error occur, The function must return 1 (you must of course
+close all the open fds before). otherwise the function must wait all child
+processes and return 0. You will find in this directory a file main.c which
+contain something to help you test your function.
