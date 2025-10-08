@@ -1,65 +1,86 @@
 #include "vbc.h"
 
+char *s;
+
 void unexpected(char c)
 {
-    if (c)
+    if(c)
         printf("Unexpected token '%c'\n", c);
     else
-        printf("Unexpected end of input\n");
-    exit(1);
+        printf("Unexpected end of file\n");
 }
 
-int ft_product(char **s)
+int ft_product()
 {
-    int a = ft_factor(s);
-    while (**s == '*')
+    int a = ft_factor();
+    int b;
+    while(*s == '*')
     {
-        (*s)++;
-        a *= ft_factor(s);
+        s++;
+        b = ft_factor();
+        a = a * b;
     }
-    return a;
+    return(a);
 }
 
-int ft_sum(char **s)
+int ft_sum()
 {
-    int sum = ft_product(s);
-    while (**s == '+')
+    int sum1 = ft_product();
+    int sum2;
+    while(*s == '+')
     {
-        (*s)++;
-       sum += ft_product(s);
+        s++;
+        sum2 = ft_product();
+        sum1 = sum1 + sum2 ;
     }
-    return sum;
+    return(sum1);
+}
+int ft_factor()
+{
+    int n = 0;
+    if(isdigit(*s))
+        return(*s++ - '0');
+    while(*s == '(')
+    {
+        s++;
+        n = ft_sum();
+        s++;
+    }
+    return(n);
 }
 
-int ft_factor(char **s)
+int check_input(char *str)
 {
-    if (isdigit(**s))
-        return *(*s)++ - '0';
-    if (**s == '(')
+    int par = 0;
+    int i = 0;
+    char last = 0;
+    while(str[i])
     {
-        (*s)++;
-        int n = ft_sum(s);
-        if (**s != ')')
-            unexpected(**s);
-        (*s)++;
-        return n;
+        if(str[i] == '(')
+            par++;
+        if(str[i] == ')')
+            par--;
+        if(isdigit(str[i]) && isdigit(str[i+1]))
+            return(unexpected(str[i+1]), 1);
+        last = str[i];
+        i++;
     }
-    if (**s == '\0')
-        unexpected(0);
-    unexpected(**s);
-    return 0;
+    if(par > 0)
+        return(unexpected('('), 1);
+    if(par < 0)
+        return(unexpected(')'), 1);
+    if(last == '+' || last == '*')
+        return(unexpected(0), 1);
+    return(0);
 }
 
 int main(int argc, char **argv)
 {
-    if (argc != 2)
-        return 1;
-
-    char *s = argv[1];
-    int res = ft_sum(&s);
-    if (*s != '\0')
-        unexpected(*s);
-
+    if(argc != 2)
+        return(1);
+    if(check_input(argv[1]))
+        return(1);
+    s = argv[1];
+    int res = ft_sum();
     printf("%d\n", res);
-    return 0;
 }
