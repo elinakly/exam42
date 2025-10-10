@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 
 int	ft_popen(const char *file, char *const argv[], char type)
 {
@@ -21,16 +22,18 @@ int	ft_popen(const char *file, char *const argv[], char type)
 	{
 		if (type == 'r')
 		{
+			close(fds[0]);
 			if (dup2(fds[1], STDOUT_FILENO) == -1)
 				exit(1);
+			close(fds[1]);
 		}
 		else
 		{
+			close(fds[1]);
 			if (dup2(fds[0], STDIN_FILENO) == -1)
 				exit(1);
+			close(fds[0]);
 		}
-		close(fds[0]);
-		close(fds[1]);
 		execvp(file, argv);
 		exit(1);
 	}

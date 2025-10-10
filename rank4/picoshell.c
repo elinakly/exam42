@@ -18,8 +18,11 @@ int picoshell(char **cmds[])
 		pid = fork();
 		if (pid == -1)
 		{
-			close(pipefd[0]);
-			close(pipefd[1]);
+			if (has_next)
+			{			
+				close(pipefd[0]);
+				close(pipefd[1]);
+			}
 			return (1);
 		}
 		if (pid == 0)
